@@ -1,7 +1,5 @@
-streamlit==1.41.1          # Streamlit 本体
-python-dotenv==1.2.1       # .env ファイル読み込み用
-openai==1.25.0             # OpenAI API 使用時
-pandas==2.3.3              # データ処理用
-numpy==2.3.5               # 数値計算用
-altair==5.5.0              # 可視化用（必要な場合のみ）
-requests==2.32.5           # HTTP リクエスト用（必要な場合のみ）
+streamlit==1.41.1
+python-dotenv==1.2.1
+langchain==0.1.0
+openai==1.31.0
+
