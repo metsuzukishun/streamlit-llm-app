@@ -1,11 +1,11 @@
 import streamlit as st
 import os
-from dotenv import load_dotenv # 環境変数（OPENAI_API_KEYなど）を読み込むライブラリ
+from dotenv import load_dotenv 
 from langchain_openai import ChatOpenAI 
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.messages import SystemMessage
 
-# 🚨 最重要: プロジェクトフォルダ直下の .env ファイルから環境変数を読み込む
+# 🚨 課題要件: .env ファイルから環境変数を読み込む
 load_dotenv() 
 
 # --- 1. 専門家の定義とシステムメッセージ ---
@@ -23,7 +23,6 @@ PROFILES = {
 }
 
 # --- 2. LLMからの回答を取得する関数 ---
-# 「入力テキスト」と「ラジオボタンでの選択値」を引数として受け取り、LLMからの回答を戻り値として返します。
 @st.cache_data
 def generate_response(user_input: str, expert_name: str) -> str:
     """
@@ -32,7 +31,7 @@ def generate_response(user_input: str, expert_name: str) -> str:
     
     # 環境変数にキーが存在するか確認
     if not os.environ.get("OPENAI_API_KEY"):
-        return "エラー：OpenAI APIキーが環境変数に設定されていません。プロジェクト直下の `.env` ファイルを確認してください。"
+        return "エラー：OpenAI APIキーが環境変数に設定されていません。Streamlit CloudのSecrets設定を確認してください。"
 
     # 選択された専門家のシステムメッセージを取得
     system_message_content = PROFILES.get(expert_name)
@@ -48,13 +47,12 @@ def generate_response(user_input: str, expert_name: str) -> str:
 
     # モデルの初期化 (ChatOpenAIを使用)
     try:
-        # load_dotenv() で読み込まれた環境変数から、ChatOpenAIがAPIキーを自動で取得します。
+        # 環境変数から、ChatOpenAIがAPIキーを自動で取得します。
         llm = ChatOpenAI(
             model="gpt-4o-mini", 
             temperature=0.7
         ) 
     except Exception as e:
-        # LLM初期化時の一般的なエラーメッセージ
         return f"LLMの初期化中にエラーが発生しました: {e}"
 
 
@@ -119,5 +117,4 @@ if st.button("回答を生成", type="primary"):
 
 # --- 実行時の注意点 ---
 st.caption("---")
-st.caption("🔑 **APIキー設定の確認**: このアプリは、`python-dotenv`を使用し、`app.py`と同じ階層にある `.env` ファイルから `OPENAI_API_KEY` を読み込みます。")
-st.caption("`.env` ファイルに `OPENAI_API_KEY=\"sk-あなたのキー\"` の形式で記述されていることをご確認ください。")
+st.caption("🔑 **APIキー設定の確認**: 課題の指示通り、Streamlit CloudのSecretsに `OPENAI_API_KEY` を設定してください。")
